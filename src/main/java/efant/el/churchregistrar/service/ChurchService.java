@@ -63,6 +63,6 @@ public class ChurchService {
     }
 
     private List<MemberDTO> membersToMembersDTOList(List<Member> memberList){
-        return memberList.stream().map(member -> memberService.memberToDTO(member)).toList();
+        return memberList.stream().map(member -> member.memberToDTO(member)).toList();
     }
 }

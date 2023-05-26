@@ -89,7 +89,6 @@ public class Church {
                 membersToMembersDTOList(church.getMembers()));
     }
     private List<MemberDTO> membersToMembersDTOList(List<Member> memberList){
-        MemberService memberService = new MemberService();
-        return memberList.stream().map(member -> memberService.memberToDTO(member)).toList();
+        return memberList.stream().map(member -> member.memberToDTO(member)).toList();
     }
 }

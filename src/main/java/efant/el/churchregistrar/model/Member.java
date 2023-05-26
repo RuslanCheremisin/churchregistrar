@@ -1,6 +1,8 @@
 package efant.el.churchregistrar.model;
 
 
+import efant.el.churchregistrar.dto.MemberDTO;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -108,5 +110,16 @@ public class Member {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public MemberDTO memberToDTO(Member member){
+        return new MemberDTO(
+                member.getId(),
+                member.getFirstName(),
+                member.getPatronymicName(),
+                member.getLastName(),
+                member.getPhoneNumber(),
+                member.getBirthDate(),
+                member.getChurch().getChurchId());
     }
 }
