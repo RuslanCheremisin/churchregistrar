@@ -18,7 +18,7 @@ public class Member {
 
     private LocalDate birthDate;
 
-    @ManyToOne(targetEntity = Church.class, cascade = CascadeType.REMOVE)
+    @ManyToOne(targetEntity = Church.class, cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "church_id")
     private Church church;
     @Enumerated(EnumType.STRING)

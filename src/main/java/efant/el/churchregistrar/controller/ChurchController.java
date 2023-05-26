@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("churches")
+@RequestMapping("churches/")
 
 public class ChurchController {
     private final ChurchService churchService;
@@ -16,9 +16,8 @@ public class ChurchController {
     }
 
     @PostMapping
-    public ResponseEntity addChurch(@RequestBody ChurchDTO churchDTO){
-        churchService.addChurch(churchDTO);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ChurchDTO> addChurch(@RequestBody ChurchDTO churchDTO){
+        return ResponseEntity.ok(churchService.addChurch(churchDTO));
     }
     @PutMapping
     public ResponseEntity assignMemberToChurch(long churchId, long memberId){

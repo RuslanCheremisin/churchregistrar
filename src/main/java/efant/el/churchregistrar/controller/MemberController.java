@@ -12,19 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("members")
+@RequestMapping("members/")
 public class MemberController {
 
-    private MemberService memberService;
+    private final MemberService memberService;
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
     @PostMapping
-    public ResponseEntity addMember(@RequestBody MemberDTO memberDTO){
-        memberService.addMember(memberDTO);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<MemberDTO> addMember(@RequestBody MemberDTO memberDTO){
+        return ResponseEntity.ok(memberService.addMember(memberDTO));
     }
 
     @GetMapping

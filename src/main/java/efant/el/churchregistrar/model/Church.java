@@ -1,6 +1,10 @@
 package efant.el.churchregistrar.model;
 
 
+import efant.el.churchregistrar.dto.ChurchDTO;
+import efant.el.churchregistrar.dto.MemberDTO;
+import efant.el.churchregistrar.service.MemberService;
+
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,30 +20,31 @@ public class Church {
     private String city;
     private String address;
     private String phoneNumber;
-    @OneToMany(targetEntity = Member.class, mappedBy = "church", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private final List<Member> members = new LinkedList<>();
+    @OneToMany(targetEntity = Member.class, mappedBy = "church", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<Member> members = new LinkedList<>();
 
     public Church() {
     }
 
-//    public Church(Long churchId, String name, String city, String address, String phoneNumber) {
-//        this.churchId = churchId;
-//        this.name = name;
-//        this.city = city;
-//        this.address = address;
-//        this.phoneNumber = phoneNumber;
-//    }
+    public Church(Long churchId, String name, String city, String address, String phoneNumber, List<Member> memberList) {
+        this.churchId = churchId;
+        this.name = name;
+        this.city = city;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.members = memberList;
+    }
 
-//    public void setChurchId(Long churchId) {
-//        this.churchId = churchId;
-//    }
+    public void setChurchId(Long churchId) {
+        this.churchId = churchId;
+    }
 
     public long getChurchId() {
-        return churchId;
+        return this.churchId;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -72,5 +77,19 @@ public class Church {
 
     public List<Member> getMembers() {
         return members;
+    }
+
+    private ChurchDTO churchToDTO(Church church) {
+        return new ChurchDTO(
+                church.getChurchId(),
+                church.getName(),
+                church.getAddress(),
+                church.getCity(),
+                church.getPhoneNumber(),
+                membersToMembersDTOList(church.getMembers()));
+    }
+    private List<MemberDTO> membersToMembersDTOList(List<Member> memberList){
+        MemberService memberService = new MemberService();
+        return memberList.stream().map(member -> memberService.memberToDTO(member)).toList();
     }
 }
