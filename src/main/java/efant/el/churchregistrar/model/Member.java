@@ -5,6 +5,8 @@ import efant.el.churchregistrar.dto.MemberDTO;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 
 @Entity
@@ -12,7 +14,7 @@ import java.time.LocalDate;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long memberId;
     private String firstName;
     private String patronymicName;
     private String lastName;
@@ -20,16 +22,18 @@ public class Member {
 
     private LocalDate birthDate;
 
-    @ManyToOne(targetEntity = Church.class, cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "church_id")
     private Church church;
     @Enumerated(EnumType.STRING)
     private MemberPosition memberPosition;
+    @OneToMany(mappedBy = "member")
+    private final List<Transaction> donationsAndReceivings = new LinkedList<>();
 
     public Member() {
     }
 
-    public Member(Long id,
+    public Member(Long memberId,
                   String firstName,
                   String patronymicName,
                   String lastName,
@@ -37,7 +41,7 @@ public class Member {
                   LocalDate birthDate,
                   Church church,
                   MemberPosition memberPosition) {
-        this.id = id;
+        this.memberId = memberId;
         this.firstName = firstName;
         this.patronymicName = patronymicName;
         this.lastName = lastName;
@@ -47,12 +51,12 @@ public class Member {
         this.memberPosition = memberPosition;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMemberId(Long id) {
+        this.memberId = id;
     }
 
-    public long getId() {
-        return id;
+    public long getMemberId() {
+        return memberId;
     }
 
 
@@ -112,14 +116,15 @@ public class Member {
         this.birthDate = birthDate;
     }
 
-    public MemberDTO memberToDTO(Member member){
+    public MemberDTO memberToDTO() {
         return new MemberDTO(
-                member.getId(),
-                member.getFirstName(),
-                member.getPatronymicName(),
-                member.getLastName(),
-                member.getPhoneNumber(),
-                member.getBirthDate(),
-                member.getChurch().getChurchId());
+                this.getMemberId(),
+                this.getFirstName(),
+                this.getPatronymicName(),
+                this.getLastName(),
+                this.getPhoneNumber(),
+                this.getBirthDate(),
+                this.getChurch().getChurchId(),
+                this.getMemberPosition());
     }
 }

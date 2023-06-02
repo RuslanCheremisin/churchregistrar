@@ -3,7 +3,6 @@ package efant.el.churchregistrar.model;
 
 import efant.el.churchregistrar.dto.ChurchDTO;
 import efant.el.churchregistrar.dto.MemberDTO;
-import efant.el.churchregistrar.service.MemberService;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -14,25 +13,28 @@ import java.util.List;
 public class Church {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "church_id", nullable = false)
+
     private Long churchId;
     private String name;
     private String city;
     private String address;
     private String phoneNumber;
-    @OneToMany(targetEntity = Member.class, mappedBy = "church", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    private List<Member> members = new LinkedList<>();
+    @OneToMany(mappedBy = "church", cascade = CascadeType.ALL)
+    private final List<Member> members = new LinkedList<>();
+    @JoinColumn(name = "church_account_id", nullable = false)
+    @OneToOne(targetEntity = ChurchAccount.class)
+    private ChurchAccount churchAccount;
 
     public Church() {
     }
 
-    public Church(Long churchId, String name, String city, String address, String phoneNumber, List<Member> memberList) {
+    public Church(Long churchId, String name, String city, String address, String phoneNumber, ChurchAccount churchAccount) {
         this.churchId = churchId;
         this.name = name;
         this.city = city;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.members = memberList;
+        this.churchAccount = churchAccount;
     }
 
     public void setChurchId(Long churchId) {
@@ -79,6 +81,14 @@ public class Church {
         return members;
     }
 
+    public ChurchAccount getChurchAccount() {
+        return churchAccount;
+    }
+
+    public void setChurchAccount(ChurchAccount churchAccount) {
+        this.churchAccount = churchAccount;
+    }
+
     private ChurchDTO churchToDTO(Church church) {
         return new ChurchDTO(
                 church.getChurchId(),
@@ -89,6 +99,6 @@ public class Church {
                 membersToMembersDTOList(church.getMembers()));
     }
     private List<MemberDTO> membersToMembersDTOList(List<Member> memberList){
-        return memberList.stream().map(member -> member.memberToDTO(member)).toList();
+        return memberList.stream().map(Member::memberToDTO).toList();
     }
 }

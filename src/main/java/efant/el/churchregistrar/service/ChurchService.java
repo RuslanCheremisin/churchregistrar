@@ -15,12 +15,9 @@ public class ChurchService {
     private final ChurchDAO churchDAO;
     private final MemberDAO memberDAO;
 
-    private final MemberService memberService;
-
-    public ChurchService(ChurchDAO churchDAO, MemberDAO memberDAO, MemberService memberService) {
+    public ChurchService(ChurchDAO churchDAO, MemberDAO memberDAO) {
         this.churchDAO = churchDAO;
         this.memberDAO = memberDAO;
-        this.memberService = memberService;
     }
 
     public ChurchDTO addChurch(ChurchDTO churchDTO) {
@@ -43,6 +40,10 @@ public class ChurchService {
         return churchToDTO(churchDAO.findById(churchId).get());
     }
 
+    public List<ChurchDTO> getAllChurchesDTO(){
+        return churchDAO.findAll().stream().map(this::churchToDTO).toList();
+    }
+
     private ChurchDTO churchToDTO(Church church) {
         return new ChurchDTO(
                 church.getChurchId(),
@@ -55,6 +56,7 @@ public class ChurchService {
 
     public Church dtoToChurch(ChurchDTO churchDTO) {
         Church church = new Church();
+        church.setChurchId(churchDTO.churchId());
         church.setName(churchDTO.name());
         church.setAddress(churchDTO.address());
         church.setCity(churchDTO.city());
@@ -63,6 +65,6 @@ public class ChurchService {
     }
 
     private List<MemberDTO> membersToMembersDTOList(List<Member> memberList){
-        return memberList.stream().map(member -> member.memberToDTO(member)).toList();
+        return memberList.stream().map(Member::memberToDTO).toList();
     }
 }

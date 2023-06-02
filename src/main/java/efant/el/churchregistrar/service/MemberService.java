@@ -19,37 +19,75 @@ public class MemberService {
         this.churchDAO = churchDAO;
     }
 
-    public MemberDTO addMember(MemberDTO memberDTO){
+    public MemberDTO addMember(MemberDTO memberDTO) {
         Member member = dtoToMember(memberDTO);
         memberDAO.save(member);
-        return memberToDTO(member);
+        return member.memberToDTO();
     }
 
-    public MemberDTO memberToDTO(Member member){
-        return new MemberDTO(
-                member.getId(),
-                member.getFirstName(),
-                member.getPatronymicName(),
-                member.getLastName(),
-                member.getPhoneNumber(),
-                member.getBirthDate(),
-                member.getChurch().getChurchId());
-    }
-
-    private Member dtoToMember(MemberDTO memberDTO){
-        Member member = new Member();
+    public MemberDTO updateMember(Long memberId, MemberDTO memberDTO){
+        Member member;
+        try{
+            member = memberDAO.findById(memberId).get();
+        }catch (Exception e){
+            throw new NoSuchEntityException("Член церкви с таким id отсутствует в базе");
+        }
         member.setFirstName(memberDTO.firstName());
         member.setPatronymicName(memberDTO.patronymicName());
         member.setLastName(memberDTO.lastName());
         member.setPhoneNumber(memberDTO.phoneNumber());
         member.setBirthDate(memberDTO.birthDate());
-        member.setMemberPosition(MemberPosition.CHURCHGOER);
-        member.setChurch(churchDAO.findById(memberDTO.churchId()).get());
-        return member;
+        member.setChurch(memberDTO.churchId() == null || memberDTO.churchId() == 0 ? null : churchDAO.findById(memberDTO.churchId()).get());
+        member.setMemberPosition(member.getMemberPosition());
+        memberDAO.save(member);
+        return member.memberToDTO();
     }
 
 
+
+    private Member dtoToMember(MemberDTO memberDTO) {
+        return new Member(
+                memberDTO.id(),
+                memberDTO.firstName(),
+                memberDTO.patronymicName(),
+                memberDTO.lastName(),
+                memberDTO.phoneNumber(),
+                memberDTO.birthDate(),
+                memberDTO.churchId() == null || memberDTO.churchId() == 0 ? null : churchDAO.findById(memberDTO.churchId()).get(),
+                MemberPosition.CHURCHGOER);
+    }
     public List<MemberDTO> getAllMembers() {
-        return memberDAO.findAll().stream().map(this::memberToDTO).toList();
+        return memberDAO.findAll().stream().map(Member::memberToDTO).toList();
+    }
+
+    public boolean deleteMember(Long memberId) {
+        try {
+            memberDAO.deleteById(memberId);
+        }catch (Exception e){
+            throw new NoSuchEntityException("Член церкви с таким id отсутствует в базе");
+        }
+        return true;
+    }
+
+    public MemberDTO getMemberById(Long memberId) {
+        MemberDTO memberDTO;
+        try {
+            Member member = memberDAO.findById(memberId).get();
+            memberDTO = member.memberToDTO();
+        }catch (Exception e){
+            throw new NoSuchEntityException("Член церкви с таким id отсутствует в базе");
+        }
+        return memberDTO;
+    }
+
+    public MemberDTO changeMemberPosition(Long memberId, MemberPosition position) {
+        Member member;
+        try {
+            member = memberDAO.findById(memberId).get();
+        }catch (Exception e){
+            throw new NoSuchEntityException("Член церкви с таким id отсутствует в базе");
+        }
+        member.setMemberPosition(position);
+        return member.memberToDTO();
     }
 }
