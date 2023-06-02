@@ -4,6 +4,7 @@ import efant.el.churchregistrar.dao.ChurchAccountDAO;
 import efant.el.churchregistrar.dao.ChurchDAO;
 import efant.el.churchregistrar.dao.MemberDAO;
 import efant.el.churchregistrar.dao.TransactionDAO;
+import efant.el.churchregistrar.dto.ChurchAccountDTO;
 import efant.el.churchregistrar.dto.TransactionDTO;
 import efant.el.churchregistrar.model.*;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,24 @@ public class ChurchAccountService {
         this.transactionDAO = transactionDAO;
     }
 
+    public ChurchAccountDTO addAccountToChurch(Long churchId){
+        Church church = churchDAO.findById(churchId).get();
+        ChurchAccount churchAccount = new ChurchAccount(0L, church);
+        church.setChurchAccount(churchAccount);
+        churchDAO.save(church);
+        return churchAccountToDTO(churchAccountDAO.save(churchAccount));
+    }
+
+    private ChurchAccountDTO churchAccountToDTO(ChurchAccount churchAccount) {
+        return new ChurchAccountDTO(churchAccount.getChurchAccountId(), churchAccount.getChurch().getChurchId(), churchAccount.getDeposit());
+    }
+
     public TransactionDTO doTransaction(Long churchId,
-                               Long memberId,
-                               TransactionDirection transactionDirection,
-                               Long amount,
-                               PurposeCategory purposeCategory,
-                               String commentary) {
+                                        Long memberId,
+                                        TransactionDirection transactionDirection,
+                                        Long amount,
+                                        PurposeCategory purposeCategory,
+                                        String commentary) {
         Church church = churchDAO.findById(churchId).get();
         ChurchAccount churchAccount = churchAccountDAO.findById(church.getChurchAccount().getChurchAccountId()).get();
         Transaction transaction = new Transaction(
@@ -49,7 +62,7 @@ public class ChurchAccountService {
         return transactionToDTO(transactionDAO.save(transaction));
     }
 
-    public TransactionDTO transactionToDTO(Transaction transaction){
+    public TransactionDTO transactionToDTO(Transaction transaction) {
         return new TransactionDTO(
                 transaction.getTransactionId(),
                 transaction.getChurchAccount().getChurch().getChurchId(),
@@ -59,4 +72,10 @@ public class ChurchAccountService {
                 transaction.getPurposeCategory(),
                 transaction.getPurposeCommentary());
     }
+
+//    public ChurchAccountDTO addChurchAccount(ChurchAccountDTO churchAccountDTO) {
+//        ChurchAccount churchAccount = new ChurchAccount(churchAccountDTO.churchAccountId(),   churchAccountDTO.deposit());
+//
+//        churchAccountDAO.save()
+//    }
 }

@@ -18,10 +18,9 @@ public class ChurchAccount {
     public ChurchAccount() {
     }
 
-    public ChurchAccount(Long churchAccountId, Long deposit, List<Transaction> transactions) {
-        this.churchAccountId = churchAccountId;
+    public ChurchAccount(Long deposit, efant.el.churchregistrar.model.Church church) {
         this.deposit = deposit;
-        this.transactions = transactions;
+        Church = church;
     }
 
     public Long getChurchAccountId(){

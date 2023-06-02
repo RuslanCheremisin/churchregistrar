@@ -1,13 +1,11 @@
 package efant.el.churchregistrar.controller;
 
+import efant.el.churchregistrar.dto.ChurchAccountDTO;
 import efant.el.churchregistrar.dto.TransactionDTO;
 import efant.el.churchregistrar.model.TransactionDirection;
 import efant.el.churchregistrar.service.ChurchAccountService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/accounts")
@@ -16,6 +14,10 @@ public class ChurchAccountController {
 
     public ChurchAccountController(ChurchAccountService churchAccountService) {
         this.churchAccountService = churchAccountService;
+    }
+    @PostMapping
+    public ResponseEntity<?> addChurchAccount(@RequestParam Long churchId){
+        return ResponseEntity.ok(churchAccountService.addAccountToChurch(churchId));
     }
 
     @PutMapping("/make-spending")

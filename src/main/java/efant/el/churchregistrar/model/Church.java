@@ -28,6 +28,18 @@ public class Church {
     public Church() {
     }
 
+    public Church(String name,
+                  String city,
+                  String address,
+                  String phoneNumber,
+                  ChurchAccount churchAccount) {
+        this.name = name;
+        this.city = city;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.churchAccount = churchAccount;
+    }
+
     public Church(Long churchId, String name, String city, String address, String phoneNumber, ChurchAccount churchAccount) {
         this.churchId = churchId;
         this.name = name;

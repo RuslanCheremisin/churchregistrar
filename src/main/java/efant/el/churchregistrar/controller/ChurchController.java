@@ -1,7 +1,6 @@
 package efant.el.churchregistrar.controller;
 
 import efant.el.churchregistrar.dto.ChurchDTO;
-import efant.el.churchregistrar.dto.TransactionDTO;
 import efant.el.churchregistrar.service.ChurchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,7 +30,8 @@ public class ChurchController {
                     content = {@Content(mediaType = "application/json")})
     })
     public ResponseEntity<ChurchDTO> addChurch(@RequestBody ChurchDTO churchDTO) {
-        return ResponseEntity.ok(churchService.addChurch(churchDTO));
+        churchService.addChurch(churchDTO);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/")

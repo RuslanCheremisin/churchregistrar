@@ -1,7 +1,5 @@
 package efant.el.churchregistrar.model;
 
-import efant.el.churchregistrar.dto.TransactionDTO;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -15,6 +13,7 @@ public class Transaction {
     @ManyToOne(targetEntity = Member.class)
     private Member member;
     private TransactionDirection transactionDirection;
+
     private Long amount;
     private PurposeCategory purposeCategory;
     private String purposeCommentary;

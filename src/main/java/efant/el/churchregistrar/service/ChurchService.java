@@ -1,10 +1,12 @@
 package efant.el.churchregistrar.service;
 
+import efant.el.churchregistrar.dao.ChurchAccountDAO;
 import efant.el.churchregistrar.dao.ChurchDAO;
 import efant.el.churchregistrar.dao.MemberDAO;
 import efant.el.churchregistrar.dto.ChurchDTO;
 import efant.el.churchregistrar.dto.MemberDTO;
 import efant.el.churchregistrar.model.Church;
+import efant.el.churchregistrar.model.ChurchAccount;
 import efant.el.churchregistrar.model.Member;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +15,12 @@ import java.util.List;
 @Service
 public class ChurchService {
     private final ChurchDAO churchDAO;
+    private final ChurchAccountDAO churchAccountDAO;
     private final MemberDAO memberDAO;
 
-    public ChurchService(ChurchDAO churchDAO, MemberDAO memberDAO) {
+    public ChurchService(ChurchDAO churchDAO, ChurchAccountDAO churchAccountDAO, MemberDAO memberDAO) {
         this.churchDAO = churchDAO;
+        this.churchAccountDAO = churchAccountDAO;
         this.memberDAO = memberDAO;
     }
 
@@ -55,13 +59,12 @@ public class ChurchService {
     }
 
     public Church dtoToChurch(ChurchDTO churchDTO) {
-        Church church = new Church();
-        church.setChurchId(churchDTO.churchId());
-        church.setName(churchDTO.name());
-        church.setAddress(churchDTO.address());
-        church.setCity(churchDTO.city());
-        church.setPhoneNumber(churchDTO.phoneNumber());
-        return church;
+        return new Church(
+                churchDTO.name(),
+                churchDTO.address(),
+                churchDTO.city(),
+                churchDTO.phoneNumber(),
+                null);
     }
 
     private List<MemberDTO> membersToMembersDTOList(List<Member> memberList){
