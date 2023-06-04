@@ -124,7 +124,7 @@ public class Member {
                 this.getLastName(),
                 this.getPhoneNumber(),
                 this.getBirthDate(),
-                this.getChurch().getChurchId(),
+                this.getChurch() != null ? this.getChurch().getChurchId() : 0,
                 this.getMemberPosition());
     }
 }

@@ -12,9 +12,11 @@ public class Transaction {
     private ChurchAccount churchAccount;
     @ManyToOne(targetEntity = Member.class)
     private Member member;
+    @Enumerated(EnumType.STRING)
     private TransactionDirection transactionDirection;
 
     private Long amount;
+    @Enumerated(EnumType.STRING)
     private PurposeCategory purposeCategory;
     private String purposeCommentary;
     private LocalDateTime transactionDateTime;
@@ -24,7 +26,6 @@ public class Transaction {
     }
 
     public Transaction(
-            Long transactionId,
             ChurchAccount churchAccount,
             Member member,
             TransactionDirection transactionDirection,
@@ -32,7 +33,6 @@ public class Transaction {
             PurposeCategory purposeCategory,
             String purposeCommentary,
             LocalDateTime transactionDateTime) {
-        this.transactionId = transactionId;
         this.churchAccount = churchAccount;
         this.member = member;
         this.transactionDirection = transactionDirection;

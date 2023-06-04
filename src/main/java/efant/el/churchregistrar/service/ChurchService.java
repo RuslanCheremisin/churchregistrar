@@ -27,6 +27,10 @@ public class ChurchService {
     public ChurchDTO addChurch(ChurchDTO churchDTO) {
         Church church = dtoToChurch(churchDTO);
         churchDAO.save(church);
+        ChurchAccount churchAccount = new ChurchAccount(0L, church);
+        churchAccountDAO.save(churchAccount);
+        church.setChurchAccount(churchAccount);
+        churchDAO.save(church);
         return churchToDTO(church);
     }
 
@@ -51,7 +55,7 @@ public class ChurchService {
     private ChurchDTO churchToDTO(Church church) {
         return new ChurchDTO(
                 church.getChurchId(),
-                church.getName(),
+                church.getChurchName(),
                 church.getAddress(),
                 church.getCity(),
                 church.getPhoneNumber(),
@@ -63,8 +67,7 @@ public class ChurchService {
                 churchDTO.name(),
                 churchDTO.address(),
                 churchDTO.city(),
-                churchDTO.phoneNumber(),
-                null);
+                churchDTO.phoneNumber());
     }
 
     private List<MemberDTO> membersToMembersDTOList(List<Member> memberList){

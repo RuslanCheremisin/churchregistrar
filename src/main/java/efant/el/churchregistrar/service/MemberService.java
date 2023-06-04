@@ -88,6 +88,7 @@ public class MemberService {
             throw new NoSuchEntityException("Член церкви с таким id отсутствует в базе");
         }
         member.setMemberPosition(position);
+        memberDAO.save(member);
         return member.memberToDTO();
     }
 }

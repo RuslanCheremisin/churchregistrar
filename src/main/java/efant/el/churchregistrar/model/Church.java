@@ -13,56 +13,67 @@ import java.util.List;
 public class Church {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long churchId;
-    private String name;
+    @Column(name = "church_name")
+    private String churchName;
+    @Column(name = "city")
     private String city;
+    @Column(name = "address")
+
     private String address;
+    @Column(name = "phone_number")
     private String phoneNumber;
     @OneToMany(mappedBy = "church", cascade = CascadeType.ALL)
     private final List<Member> members = new LinkedList<>();
-    @JoinColumn(name = "church_account_id", nullable = false)
-    @OneToOne(targetEntity = ChurchAccount.class)
+    @JoinColumn(name = "church_account_id")
+    @OneToOne(fetch = FetchType.EAGER)
     private ChurchAccount churchAccount;
 
     public Church() {
     }
 
-    public Church(String name,
+    public Church(String churchName,
                   String city,
                   String address,
                   String phoneNumber,
                   ChurchAccount churchAccount) {
-        this.name = name;
+        this.churchName = churchName;
         this.city = city;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.churchAccount = churchAccount;
     }
 
-    public Church(Long churchId, String name, String city, String address, String phoneNumber, ChurchAccount churchAccount) {
+    public Church(Long churchId, String churchName, String city, String address, String phoneNumber, ChurchAccount churchAccount) {
         this.churchId = churchId;
-        this.name = name;
+        this.churchName = churchName;
         this.city = city;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.churchAccount = churchAccount;
+    }
+
+    public Church(String churchName, String address, String city, String phoneNumber) {
+        this.churchName = churchName;
+        this.city = city;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Long getChurchId() {
+        return churchId;
     }
 
     public void setChurchId(Long churchId) {
         this.churchId = churchId;
     }
 
-    public long getChurchId() {
-        return this.churchId;
+    public String getChurchName() {
+        return churchName;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setChurchName(String churchName) {
+        this.churchName = churchName;
     }
 
     public String getCity() {
@@ -104,13 +115,14 @@ public class Church {
     private ChurchDTO churchToDTO(Church church) {
         return new ChurchDTO(
                 church.getChurchId(),
-                church.getName(),
+                church.getChurchName(),
                 church.getAddress(),
                 church.getCity(),
                 church.getPhoneNumber(),
                 membersToMembersDTOList(church.getMembers()));
     }
-    private List<MemberDTO> membersToMembersDTOList(List<Member> memberList){
+
+    private List<MemberDTO> membersToMembersDTOList(List<Member> memberList) {
         return memberList.stream().map(Member::memberToDTO).toList();
     }
 }

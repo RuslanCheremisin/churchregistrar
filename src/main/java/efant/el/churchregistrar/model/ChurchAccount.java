@@ -12,13 +12,13 @@ public class ChurchAccount {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "church_id")
     private Church Church;
-    @OneToMany(mappedBy = "churchAccount", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "churchAccount", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
     public ChurchAccount() {
     }
 
-    public ChurchAccount(Long deposit, efant.el.churchregistrar.model.Church church) {
+    public ChurchAccount(Long deposit, Church church) {
         this.deposit = deposit;
         Church = church;
     }

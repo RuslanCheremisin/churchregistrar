@@ -15,10 +15,12 @@ public class ChurchAccountController {
     public ChurchAccountController(ChurchAccountService churchAccountService) {
         this.churchAccountService = churchAccountService;
     }
-    @PostMapping
-    public ResponseEntity<?> addChurchAccount(@RequestParam Long churchId){
-        return ResponseEntity.ok(churchAccountService.addAccountToChurch(churchId));
+
+    @GetMapping("/")
+    public ResponseEntity<ChurchAccountDTO> getAccountDetails(Long accountId){
+        return ResponseEntity.ok(churchAccountService.getAccountDetails(accountId));
     }
+
 
     @PutMapping("/make-spending")
     public ResponseEntity<TransactionDTO> makeSpending(@RequestBody TransactionDTO transactionDTO){

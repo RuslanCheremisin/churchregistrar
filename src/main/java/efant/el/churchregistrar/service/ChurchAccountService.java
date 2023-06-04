@@ -25,18 +25,6 @@ public class ChurchAccountService {
         this.transactionDAO = transactionDAO;
     }
 
-    public ChurchAccountDTO addAccountToChurch(Long churchId){
-        Church church = churchDAO.findById(churchId).get();
-        ChurchAccount churchAccount = new ChurchAccount(0L, church);
-        church.setChurchAccount(churchAccount);
-        churchDAO.save(church);
-        return churchAccountToDTO(churchAccountDAO.save(churchAccount));
-    }
-
-    private ChurchAccountDTO churchAccountToDTO(ChurchAccount churchAccount) {
-        return new ChurchAccountDTO(churchAccount.getChurchAccountId(), churchAccount.getChurch().getChurchId(), churchAccount.getDeposit());
-    }
-
     public TransactionDTO doTransaction(Long churchId,
                                         Long memberId,
                                         TransactionDirection transactionDirection,
@@ -44,11 +32,10 @@ public class ChurchAccountService {
                                         PurposeCategory purposeCategory,
                                         String commentary) {
         Church church = churchDAO.findById(churchId).get();
-        ChurchAccount churchAccount = churchAccountDAO.findById(church.getChurchAccount().getChurchAccountId()).get();
+        ChurchAccount churchAccount = churchAccountDAO.findById(church.getChurchAccount().getChurchAccountId()).orElseThrow();
         Transaction transaction = new Transaction(
-                0L,
                 churchAccount,
-                memberDAO.findById(memberId).get(),
+                memberDAO.findById(memberId).orElseThrow(),
                 transactionDirection,
                 amount,
                 purposeCategory,
@@ -56,7 +43,11 @@ public class ChurchAccountService {
         if (transactionDirection.equals(TransactionDirection.INCOME_DONATION)) {
             churchAccount.setDeposit(churchAccount.getDeposit() + amount);
         } else {
-            churchAccount.setDeposit(churchAccount.getDeposit() - amount);
+            if (churchAccount.getDeposit()>=amount){
+                churchAccount.setDeposit(churchAccount.getDeposit() - amount);
+            }else {
+                throw new IllegalArgumentException("Spending amount is more than current deposit!");
+            }
         }
         churchAccountDAO.save(churchAccount);
         return transactionToDTO(transactionDAO.save(transaction));
@@ -73,9 +64,14 @@ public class ChurchAccountService {
                 transaction.getPurposeCommentary());
     }
 
-//    public ChurchAccountDTO addChurchAccount(ChurchAccountDTO churchAccountDTO) {
-//        ChurchAccount churchAccount = new ChurchAccount(churchAccountDTO.churchAccountId(),   churchAccountDTO.deposit());
-//
-//        churchAccountDAO.save()
-//    }
+    public ChurchAccountDTO getAccountDetails(Long accountId) {
+        return churchAccountToDT0(churchAccountDAO.findById(accountId).orElseThrow());
+    }
+
+    private ChurchAccountDTO churchAccountToDT0(ChurchAccount churchAccount) {
+        return new ChurchAccountDTO(
+                churchAccount.getChurchAccountId(),
+                churchAccount.getChurch().getChurchId(),
+                churchAccount.getDeposit());
+    }
 }
