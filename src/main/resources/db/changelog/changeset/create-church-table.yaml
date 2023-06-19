@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-church
+      author: Rus
+      changes:
+        - createTable:
+            tableName: Churches
+            columns:
+              - column:
+                  name: church_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                 name: church_name
+                 type: varchar
+                 constraints:
+                  nullable: false
+              - column:
+                  name: city
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar
+                  constraints: true
+              - column:
+                  name: phone_number
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: church_account_id
+                  type: bigint
+                  constraints:
+                    nullable: true

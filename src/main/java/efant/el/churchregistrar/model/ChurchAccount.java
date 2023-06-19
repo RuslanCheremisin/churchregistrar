@@ -3,6 +3,7 @@ package efant.el.churchregistrar.model;
 import javax.persistence.*;
 import java.util.List;
 @Entity
+@Table(name = "church_accounts")
 public class ChurchAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +36,11 @@ public class ChurchAccount {
         this.deposit = value;
     }
 
-    public efant.el.churchregistrar.model.Church getChurch() {
+    public Church getChurch() {
         return Church;
+    }
+
+    public List<Transaction> getTransactions(){
+        return List.copyOf(transactions);
     }
 }

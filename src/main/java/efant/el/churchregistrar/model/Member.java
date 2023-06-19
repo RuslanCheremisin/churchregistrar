@@ -2,6 +2,7 @@ package efant.el.churchregistrar.model;
 
 
 import efant.el.churchregistrar.dto.MemberDTO;
+import efant.el.churchregistrar.util.ValidateUtil;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ public class Member {
 
     private LocalDate birthDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "church_id")
     private Church church;
     @Enumerated(EnumType.STRING)
@@ -42,10 +43,10 @@ public class Member {
                   Church church,
                   MemberPosition memberPosition) {
         this.memberId = memberId;
-        this.firstName = firstName;
-        this.patronymicName = patronymicName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
+        this.firstName = ValidateUtil.stringIsValid(firstName);
+        this.patronymicName = ValidateUtil.stringIsValid(patronymicName);
+        this.lastName = ValidateUtil.stringIsValid(lastName);
+        this.phoneNumber = ValidateUtil.phoneNumberIsValid(phoneNumber);
         this.birthDate = birthDate;
         this.church = church;
         this.memberPosition = memberPosition;

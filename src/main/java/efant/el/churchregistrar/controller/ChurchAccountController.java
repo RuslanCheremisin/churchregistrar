@@ -7,6 +7,8 @@ import efant.el.churchregistrar.service.ChurchAccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/accounts")
 public class ChurchAccountController {
@@ -16,16 +18,26 @@ public class ChurchAccountController {
         this.churchAccountService = churchAccountService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<ChurchAccountDTO> getAccountDetails(Long accountId){
+    @GetMapping("/{id}")
+    public ResponseEntity<ChurchAccountDTO> getAccountDetails(@PathVariable(name = "id") Long accountId) {
         return ResponseEntity.ok(churchAccountService.getAccountDetails(accountId));
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<ChurchAccountDTO>> getAllChurchAccounts() {
+        return ResponseEntity.ok(churchAccountService.getAllChurchAccounts());
+    }
+
+    @GetMapping("/{id}/transactions")
+    public ResponseEntity<List<TransactionDTO>> getTransactionsByChurchAccountId(@PathVariable(name = "id") Long churchAccountId) {
+        return ResponseEntity.ok(churchAccountService.getTransactions(churchAccountId));
     }
 
 
     @PutMapping("/make-spending")
-    public ResponseEntity<TransactionDTO> makeSpending(@RequestBody TransactionDTO transactionDTO){
+    public ResponseEntity<TransactionDTO> makeSpending(@RequestBody TransactionDTO transactionDTO) {
         return ResponseEntity.ok(churchAccountService.doTransaction(
-                transactionDTO.churchId(),
+                transactionDTO.churchAccountId(),
                 transactionDTO.memberId(),
                 TransactionDirection.OUTCOME_SPENDING,
                 transactionDTO.amount(),
@@ -35,9 +47,9 @@ public class ChurchAccountController {
     }
 
     @PutMapping("/receive-donation")
-    public ResponseEntity<TransactionDTO> receiveDonation(@RequestBody TransactionDTO transactionDTO){
+    public ResponseEntity<TransactionDTO> receiveDonation(@RequestBody TransactionDTO transactionDTO) {
         return ResponseEntity.ok(churchAccountService.doTransaction(
-                transactionDTO.churchId(),
+                transactionDTO.churchAccountId(),
                 transactionDTO.memberId(),
                 TransactionDirection.INCOME_DONATION,
                 transactionDTO.amount(),

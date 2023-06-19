@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-foreign-keys
+      author: Rus
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: church_accounts
+            baseColumnNames: church_id
+            referencedTableName: churches
+            constraintName: church_id
+            referencedColumnNames: church_id
+        - addForeignKeyConstraint:
+            baseTableName: churches
+            baseColumnNames: church_account_id
+            referencedTableName: church_accounts
+            constraintName: church_account_id
+            referencedColumnNames: church_account_id

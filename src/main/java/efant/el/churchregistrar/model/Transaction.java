@@ -1,16 +1,23 @@
 package efant.el.churchregistrar.model;
 
+import efant.el.churchregistrar.dto.TransactionDTO;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "transactions")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
+
     @ManyToOne(targetEntity = ChurchAccount.class)
+    @JoinColumn(name = "church_account_id")
     private ChurchAccount churchAccount;
+
     @ManyToOne(targetEntity = Member.class)
+    @JoinColumn(name = "member_id")
     private Member member;
     @Enumerated(EnumType.STRING)
     private TransactionDirection transactionDirection;
@@ -19,6 +26,7 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private PurposeCategory purposeCategory;
     private String purposeCommentary;
+    @Column(name = "date_time")
     private LocalDateTime transactionDateTime;
 
     public Transaction() {
@@ -104,5 +112,16 @@ public class Transaction {
 
     public void setTransactionDateTime(LocalDateTime transactionDateTime) {
         this.transactionDateTime = transactionDateTime;
+    }
+
+    public static TransactionDTO transactionToDTO(Transaction transaction){
+        return new TransactionDTO(
+                transaction.getTransactionId(),
+                transaction.getChurchAccount().getChurchAccountId(),
+                transaction.getMember().getMemberId(),
+                transaction.amount,
+                transaction.getTransactionDirection(),
+                transaction.getPurposeCategory(),
+                transaction.purposeCommentary);
     }
 }

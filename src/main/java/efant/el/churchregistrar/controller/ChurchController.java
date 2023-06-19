@@ -46,7 +46,7 @@ public class ChurchController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{church_id}")
+    @GetMapping("/{id}")
     @Operation(summary="Получение церкви по её id")
     @ApiResponses(value = {
             @ApiResponse(
@@ -54,7 +54,7 @@ public class ChurchController {
                     description = "Церковь найдена"
             )
     })
-    public ResponseEntity<ChurchDTO> getChurchById(@PathVariable("church_id") long churchId) {
+    public ResponseEntity<ChurchDTO> getChurchById(@PathVariable("id") long churchId) {
         return ResponseEntity.ok(churchService.getChurchDTOById(churchId));
     }
 

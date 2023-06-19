@@ -10,6 +10,8 @@ import efant.el.churchregistrar.model.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ChurchAccountService {
@@ -53,7 +55,7 @@ public class ChurchAccountService {
         return transactionToDTO(transactionDAO.save(transaction));
     }
 
-    public TransactionDTO transactionToDTO(Transaction transaction) {
+    private TransactionDTO transactionToDTO(Transaction transaction) {
         return new TransactionDTO(
                 transaction.getTransactionId(),
                 transaction.getChurchAccount().getChurch().getChurchId(),
@@ -66,6 +68,14 @@ public class ChurchAccountService {
 
     public ChurchAccountDTO getAccountDetails(Long accountId) {
         return churchAccountToDT0(churchAccountDAO.findById(accountId).orElseThrow());
+    }
+
+    public List<ChurchAccountDTO> getAllChurchAccounts(){
+        return churchAccountDAO.findAll().stream().map(this::churchAccountToDT0).collect(Collectors.toList());
+    }
+
+    public List<TransactionDTO> getTransactions(Long churchAccountId){
+        return churchAccountDAO.findById(churchAccountId).get().getTransactions().stream().map(Transaction::transactionToDTO).collect(Collectors.toList());
     }
 
     private ChurchAccountDTO churchAccountToDT0(ChurchAccount churchAccount) {

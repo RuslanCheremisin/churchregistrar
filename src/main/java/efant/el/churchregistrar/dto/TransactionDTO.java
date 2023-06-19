@@ -5,7 +5,7 @@ import efant.el.churchregistrar.model.TransactionDirection;
 
 public record TransactionDTO(
         Long transactionId,
-        Long churchId,
+        Long churchAccountId,
         Long memberId,
         Long amount,
         TransactionDirection transactionDirection,

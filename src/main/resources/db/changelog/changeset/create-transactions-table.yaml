@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-transaction
+      author: Rus
+      changes:
+        - createTable:
+            tableName: Transactions
+            columns:
+              - column:
+                  name: transaction_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: church_account_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: church_acc
+                    references: church_accounts(church_account_id)
+              - column:
+                  name: member_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: member
+                    references: members(member_id)
+              - column:
+                  name: transaction_direction
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purpose_category
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purpose_commentary
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: date_time
+                  type: datetime
