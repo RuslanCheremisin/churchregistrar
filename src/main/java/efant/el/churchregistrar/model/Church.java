@@ -3,6 +3,7 @@ package efant.el.churchregistrar.model;
 
 import efant.el.churchregistrar.dto.ChurchDTO;
 import efant.el.churchregistrar.dto.MemberDTO;
+import efant.el.churchregistrar.util.ValidateUtil;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -37,36 +38,33 @@ public class Church {
                   String address,
                   String phoneNumber,
                   ChurchAccount churchAccount) {
-        this.churchName = churchName;
-        this.city = city;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
+        this.churchName = ValidateUtil.stringIsValid(churchName);
+        this.city = ValidateUtil.stringIsValid(city);
+        this.address = ValidateUtil.stringIsValid(address);
+        this.phoneNumber = ValidateUtil.phoneNumberIsValid(phoneNumber);
         this.churchAccount = churchAccount;
     }
 
     public Church(Long churchId, String churchName, String city, String address, String phoneNumber, ChurchAccount churchAccount) {
         this.churchId = churchId;
-        this.churchName = churchName;
-        this.city = city;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
+        this.churchName = ValidateUtil.stringIsValid(churchName);
+        this.city = ValidateUtil.stringIsValid(city);
+        this.address = ValidateUtil.stringIsValid(address);
+        this.phoneNumber = ValidateUtil.phoneNumberIsValid(phoneNumber);
         this.churchAccount = churchAccount;
     }
 
     public Church(String churchName, String address, String city, String phoneNumber) {
-        this.churchName = churchName;
-        this.city = city;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
+        this.churchName = ValidateUtil.stringIsValid(churchName);
+        this.city = ValidateUtil.stringIsValid(city);
+        this.address = ValidateUtil.stringIsValid(address);
+        this.phoneNumber = ValidateUtil.phoneNumberIsValid(phoneNumber);
     }
 
     public Long getChurchId() {
         return churchId;
     }
 
-    public void setChurchId(Long churchId) {
-        this.churchId = churchId;
-    }
 
     public String getChurchName() {
         return churchName;

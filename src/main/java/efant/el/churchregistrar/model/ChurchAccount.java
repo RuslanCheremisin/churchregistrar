@@ -12,7 +12,7 @@ public class ChurchAccount {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "church_id")
-    private Church Church;
+    private Church church;
     @OneToMany(mappedBy = "churchAccount", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
@@ -21,7 +21,7 @@ public class ChurchAccount {
 
     public ChurchAccount(Long deposit, Church church) {
         this.deposit = deposit;
-        Church = church;
+        this.church = church;
     }
 
     public Long getChurchAccountId(){
@@ -37,10 +37,10 @@ public class ChurchAccount {
     }
 
     public Church getChurch() {
-        return Church;
+        return this.church;
     }
 
     public List<Transaction> getTransactions(){
-        return List.copyOf(transactions);
+        return List.copyOf(this.transactions);
     }
 }

@@ -86,9 +86,6 @@ public class Transaction {
         return amount;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
-    }
 
     public PurposeCategory getPurposeCategory() {
         return purposeCategory;
@@ -108,10 +105,6 @@ public class Transaction {
 
     public LocalDateTime getTransactionDateTime() {
         return transactionDateTime;
-    }
-
-    public void setTransactionDateTime(LocalDateTime transactionDateTime) {
-        this.transactionDateTime = transactionDateTime;
     }
 
     public static TransactionDTO transactionToDTO(Transaction transaction){
