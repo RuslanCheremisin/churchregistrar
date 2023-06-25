@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      - file: db/changelog/changeset/create-church-table.yaml
+  - include:
+      - file: db/changelog/changeset/create-church-account-table.yaml
+  - include:
+      - file: db/changelog/changeset/create-member-table.yaml
+  - include:
+      - file: db/changelog/changeset/create-transactions-table.yaml
+  - include:
+      - file: db/changelog/changeset/add-all-foreign-keys.yaml

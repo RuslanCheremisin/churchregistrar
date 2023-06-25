@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-church
+      author: Rus
+      changes:
+        - createTable:
+            tableName: Church_Accounts
+            columns:
+              - column:
+                  name: church_account_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: deposit
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: church_id
+                  type: bigint
+                  constraints:
+                    nullable: false
